@@ -16,6 +16,12 @@ interface Creature {
         return coordinate.getDistance(c.coordinate)
     }
 
+    fun getInformation(): String {
+        return "id: $id\n" +
+                "coordinate: (${coordinate.x}, ${coordinate.y})\n" +
+                "leg: ${leg.toString()}\n"
+    }
+
     fun die() {
         world.remove(this)
     }
@@ -23,11 +29,15 @@ interface Creature {
     private fun walk(x: Int, y: Int) {
         when (0 <= coordinate.x + x && coordinate.x + x <= world.mapWidth - 1) {
             true -> coordinate.x += x
-            else -> {}
+            else -> {
+                if (x < 0) walk(x + 1, y) else walk(x - 1, y)
+            }
         }
         when (0 <= coordinate.y + y && coordinate.y + y <= world.mapHeight - 1) {
             true -> coordinate.y += y
-            else -> {}
+            else -> {
+                if (y < 0) walk(x, y + 1) else walk(x, y - 1)
+            }
         }
     }
 

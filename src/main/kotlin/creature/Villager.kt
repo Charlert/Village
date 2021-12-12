@@ -14,4 +14,9 @@ class Villager(
     override fun hello() {
         println("$name(${coordinate.x}, ${coordinate.y}): Hello!")
     }
+
+    override fun getInformation(): String {
+        return "name: $name\n" +
+                super.getInformation()
+    }
 }

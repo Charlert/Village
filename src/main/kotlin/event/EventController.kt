@@ -14,9 +14,22 @@ class EventController {
     }
 
     fun run(cmd: String, id: Int) {
+        val c = world.findById(id)
+        if (c == null) {
+            println("error: $id not found")
+            return
+        }
         when (cmd) {
-            "hello" -> world.findById(id)?.hello()
-            "die" -> world.findById(id)?.die()
+            "hello" -> c.hello()
+            "die" -> c.die()
+            "show" -> print(c.getInformation())
+            else -> println("error: undefined cmd \"$cmd\"")
+        }
+    }
+
+    fun worldRun(cmd: String) {
+        when (cmd) {
+            "add a villager" -> print(world.findById(villagerFactory.create())?.getInformation())
             else -> println("error: undefined cmd \"$cmd\"")
         }
     }

@@ -5,8 +5,30 @@ import charlert.village.event.EventController
 fun main() {
     val ec = EventController()
     ec.villagerFactory.create()
-    val v2 = ec.villagerFactory.create()
-    ec.allRun("hello")
-    ec.run("die", v2)
-    ec.allRun("hello")
+    while (true) {
+        print("--> ")
+        val cmd = readln()
+        when (cmd) {
+            "run" -> {
+                print("--> (run) target id = ")
+                val id = readln().toInt()
+                print("--> (run) command = ")
+                val cmd2 = readln()
+                ec.run(cmd2, id)
+            }
+            "all run" -> {
+                print("--> (all run) command = ")
+                val cmd2 = readln()
+                ec.allRun(cmd2)
+            }
+            "world run" -> {
+                print("--> (world run) command = ")
+                val cmd2 = readln()
+                ec.worldRun(cmd2)
+            }
+            else -> {
+                println("error: undefined cmd \"$cmd\"")
+            }
+        }
+    }
 }
