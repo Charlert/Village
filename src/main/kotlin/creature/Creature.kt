@@ -19,7 +19,7 @@ interface Creature {
     fun getInformation(): String {
         return "id: $id\n" +
                 "coordinate: (${coordinate.x}, ${coordinate.y})\n" +
-                "leg: ${leg.toString()}\n"
+                "leg: $leg\n"
     }
 
     fun die() {

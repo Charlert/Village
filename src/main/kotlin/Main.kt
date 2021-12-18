@@ -3,12 +3,13 @@ package charlert.village
 import charlert.village.event.EventController
 
 fun main() {
+    println("Hello world!")
+
     val ec = EventController()
     ec.villagerFactory.create()
     while (true) {
         print("--> ")
-        val cmd = readln()
-        when (cmd) {
+        when (val cmd = readln()) {
             "run" -> {
                 print("--> (run) target id = ")
                 val id = readln().toInt()
