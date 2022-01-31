@@ -56,4 +56,10 @@ interface Creature {
     fun walkSouth() {
         walk(0, -leg.speed)
     }
+
+    fun kill(target: Creature) {
+        if (this.getDistance(target) <= 3) {
+            target.die()
+        }
+    }
 }

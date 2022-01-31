@@ -1,36 +1,39 @@
 package charlert.village.event
 
+import charlert.village.creature.action.VillagerAction
+import charlert.village.creature.action.VillagerAction.*
+import charlert.village.creature.action.WorldAction
 import charlert.village.factory.VillagerFactory
 import charlert.village.world.World
 
 class EventController {
     private val world = World(32, 32)
-    val villagerFactory = VillagerFactory(world)
+    private val villagerFactory = VillagerFactory(world)
 
-    fun allRun(cmd: String) {
-        for (c in world.getAll()) {
-            run(cmd, c.id)
+    fun run(action: WorldAction) {
+        when (action) {
+            WorldAction.create -> print(world.findById(villagerFactory.create())?.getInformation())
         }
     }
 
-    fun run(cmd: String, id: Int) {
-        val c = world.findById(id)
-        if (c == null) {
+    fun run(action: VillagerAction, id: Int, targetId: Int = -1) {
+        val villager = world.findById(id)
+        val target = world.findById(targetId)
+        if (villager == null) {
             println("error: $id not found")
             return
         }
-        when (cmd) {
-            "hello" -> c.hello()
-            "die" -> c.die()
-            "show" -> print(c.getInformation())
-            else -> println("error: undefined cmd \"$cmd\"")
-        }
-    }
-
-    fun worldRun(cmd: String) {
-        when (cmd) {
-            "add a villager" -> print(world.findById(villagerFactory.create())?.getInformation())
-            else -> println("error: undefined cmd \"$cmd\"")
+        when (action) {
+            hello -> villager.hello()
+            die -> villager.die()
+            show -> print(villager.getInformation())
+            kill -> {
+                if (target == null) {
+                    println("error: $targetId not found")
+                    return
+                }
+                villager.kill(target)
+            }
         }
     }
 }
