@@ -21,7 +21,7 @@ interface Creature {
         return location.getDistance(c.location)
     }
 
-    fun info(): String = "id: $id\n" + "coordinate: (${location.x}, ${location.y})\n" + "leg: $leg\n"
+    fun info(): String = "id: $id\n" + "coordinate: (${location.x}, ${location.y})\n" + "leg: ${leg.javaClass}\n"
 
     fun die(reason: String) {
         announcer.send("I am dead. ($reason)")
@@ -75,5 +75,9 @@ interface Creature {
     fun getChar() = id.toString().toCharArray()[0]
     fun walkTo(target: Creature) {
         walkTo(target.location)
+    }
+
+    fun getStrLocation(): String {
+        return "(${location.x}, ${location.y})"
     }
 }

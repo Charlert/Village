@@ -55,6 +55,10 @@ class World(val mapWidth: Int, val mapHeight: Int) {
             }
             sb.append('\n')
         }
+        creatures.forEach {
+            sb.append("${it.name}${it.getStrLocation()} ")
+        }
+        sb.append("\n")
         print(sb.toString())
     }
 

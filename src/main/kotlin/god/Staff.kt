@@ -7,6 +7,7 @@ import charlert.village.action.VillagerAction
 import charlert.village.action.VillagerAction.*
 import charlert.village.creature.Creature
 import charlert.village.creature.event.Chase
+import charlert.village.creature.event.Escape
 import charlert.village.creature.event.Event
 import charlert.village.creature.factory.BatFactory
 import charlert.village.creature.factory.VillagerFactory
@@ -129,12 +130,16 @@ class Staff {
     }
 
     fun remove(creature: Creature) {
+        creature.events.removeAll { it.owner == creature }
         world.remove(creature)
     }
 
     fun test() {
-        world.getCreature(1)?.let {
+        world.getCreature(1)?.let { it ->
             it.events.add(Chase(this, it, world.getCreature(2)!!))
+            world.getCreature(2)?.let {
+                it.events.add(Escape(this, it, world.getCreature(1)!!))
+            }
         }
     }
 
