@@ -14,7 +14,7 @@ repositories {
 
 dependencies {
     testImplementation("org.jetbrains.kotlin:kotlin-test:1.6.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-cli:0.3.4")
+    implementation("net.sourceforge.argparse4j:argparse4j:0.9.0")
 }
 
 tasks.test {

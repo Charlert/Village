@@ -1,60 +1,64 @@
 package charlert.village
 
-import charlert.village.creature.action.VillagerAction
-import charlert.village.creature.action.WorldAction
-import charlert.village.event.EventController
-import kotlinx.cli.ArgParser
-import kotlinx.cli.ArgType
+import charlert.village.god.Staff
+import net.sourceforge.argparse4j.helper.HelpScreenException
+import net.sourceforge.argparse4j.inf.ArgumentParserException
 
+fun welcome() {
+    println("Welcome to the Village of Charlert!")
+    println("Enter 'help' for a list of commands.")
+    println("Enter 'quit' to exit the game.")
+    println()
+}
+
+fun Staff.help() {
+    try {
+        let(arrayOf("--help"))
+    } catch (e: ArgumentParserException) {
+        println(e.message)
+    }
+    repeat(16) {
+        print("-")
+    }
+    println()
+    try {
+        plz(arrayOf("--help"))
+    } catch (e: ArgumentParserException) {
+        println(e.message)
+    }
+    repeat(16) {
+        print("-")
+    }
+    println()
+    try {
+        summon(arrayOf("--help"))
+    } catch (e: ArgumentParserException) {
+        println(e.message)
+    }
+}
 
 fun main() {
-    val eventController = EventController()
-    var userInput: String
+    welcome()
+    val staff = Staff()
     while (true) {
-        // 作用于Villager
-        val letParser = ArgParser("let")
-        val selectedVillager by letParser.argument(
-            type = ArgType.Int, fullName = "village", description = "Choose a village"
-        )
-        val villagerAction by letParser.argument(
-            type = ArgType.Choice<VillagerAction>(),
-            fullName = "action",
-            description = "The action what the object should do"
-        )
-        val targetCreature by letParser.option(
-            type = ArgType.Int, fullName = "target", shortName = "t", description = "The target"
-        )
-        // 作用于World
-        val plzParser = ArgParser("plz")
-        val worldAction by plzParser.argument(
-            type = ArgType.Choice<WorldAction>(), fullName = "action",
-            description = "The action what the world should do"
-        )
-
+        staff.go()
+        staff.world.draw()
+        println()
         print("--> ")
-        userInput = readln()
-        val args = userInput.split("\\s+".toRegex()).toTypedArray()
-        if (args.size <= 1) continue
-        when (args[0]) {
-            "let" -> {
-                letParser.parse(args.sliceArray(1 until args.size))
-                if (villagerAction == VillagerAction.kill) {
-                    targetCreature?.let { eventController.run(villagerAction, selectedVillager, it) }
-                } else {
-                    eventController.run(villagerAction, selectedVillager)
-                }
+        val userInput = readln().split(" ").toTypedArray()
+        try {
+            when (userInput[0]) {
+                "let" -> staff.let(userInput.drop(1).toTypedArray())
+                "plz" -> staff.plz(userInput.drop(1).toTypedArray())
+                "summon" -> staff.summon(userInput.drop(1).toTypedArray())
+                "help" -> staff.help()
+                "test" -> staff.test()
+                "quit" -> return
+                else -> println("invalid command")
             }
-            "plz" -> {
-                plzParser.parse(args.sliceArray(1 until args.size))
-                eventController.run(worldAction)
-            }
+        } catch (_: HelpScreenException) {
+        } catch (e: ArgumentParserException) {
+            println(e.message)
         }
     }
-//    val parser = ArgParser("p")
-//    val i by parser.option(type = ArgType.String, fullName = "hghag", shortName = "i")
-//
-//    val userInput = readln()
-//    val args = userInput.split("\\s+".toRegex()).toTypedArray()
-//    parser.parse(args.sliceArray(1 until args.size))
-//    println(i is String)
 }
